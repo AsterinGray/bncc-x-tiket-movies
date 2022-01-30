@@ -1,22 +1,41 @@
-import { Button } from '@chakra-ui/button'
-import { Input, InputGroup, InputLeftElement } from '@chakra-ui/input'
-import { Box, Container, Grid, Heading } from '@chakra-ui/layout'
-import Head from 'next/head'
-import MovieCard from '../src/components/MovieCard'
-import { SearchIcon } from '@chakra-ui/icons'
-import Navbar from '../src/components/Navbar'
+import { Button } from "@chakra-ui/button";
+import { Input, InputGroup, InputLeftElement } from "@chakra-ui/input";
+import { Box, Container, Grid, Heading } from "@chakra-ui/layout";
+import Head from "next/head";
+import MovieCard from "../src/components/MovieCard";
+import { SearchIcon } from "@chakra-ui/icons";
+import Navbar from "../src/components/Navbar";
+import { useRef } from "react";
+import api from "../src/api";
+import { useState } from "react";
 
 export const getServerSideProps = async () => {
-  const res = await fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.NEXT_PUBLIC_API_KEY}`
-  )
-  const data = await res.json()
+  const { data } = await api.get("/movie/popular");
   return {
-    props: { data },
-  }
-}
+    props: { movies: data.results },
+  };
+};
 
-const Home = ({ data }) => {
+const Home = ({ movies }) => {
+  const inputRef = useRef(null);
+  const [searchedMovies, setSearchedMovies] = useState(null);
+
+  const searchMovie = async (searchTerm) => {
+    const { data } = await api.get(`/search/movie`, {
+      params: {
+        query: searchTerm,
+      },
+    });
+    return data;
+  };
+
+  const onFormSubmit = async (e) => {
+    e.preventDefault();
+    const searchTerm = inputRef.current.value;
+    const { results } = await searchMovie(searchTerm);
+    setSearchedMovies(results);
+  };
+
   return (
     <>
       <Head>
@@ -33,41 +52,70 @@ const Home = ({ data }) => {
             </Heading>
             <Grid
               templateColumns={{
-                base: '1fr',
-                sm: 'repeat(3, 1fr)',
-                md: 'repeat(4, 1fr)',
+                base: "1fr",
+                sm: "repeat(3, 1fr)",
+                md: "repeat(5, 1fr)",
               }}
               columnGap="12px"
-              rowGap={`24px`}
+              rowGap={`48px`}
             >
-              {data.results.map((result) => (
+              {movies.map((movie) => (
                 <MovieCard
-                  key={result.id}
-                  title={result.title}
-                  link={String(result.id)}
-                  image={result.poster_path}
+                  key={movie.id}
+                  title={movie.title}
+                  link={String(movie.id)}
+                  image={movie.poster_path}
                 />
               ))}
             </Grid>
           </Container>
         </Box>
-        <Container maxW="container.sm" paddingY="48px" centerContent>
+        <Container maxW="container.lg" paddingY="48px" centerContent>
           <Heading as="h1" color="#4A5568" marginBottom="24px">
             Cari Film
           </Heading>
-          <InputGroup>
-            <InputLeftElement pointerEvents="none">
-              <SearchIcon color="gray.300" />
-            </InputLeftElement>
-            <Input placeholder="Search" />
-            <Button backgroundColor="#2B6CB0" color="white" marginLeft="8px">
-              Cari
-            </Button>
-          </InputGroup>
+          <form onSubmit={(e) => onFormSubmit(e)}>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <SearchIcon color="gray.300" />
+              </InputLeftElement>
+              <Input name="search" placeholder="Search" ref={inputRef} />
+              <Button
+                backgroundColor="#2B6CB0"
+                color="white"
+                marginLeft="8px"
+                type="submit"
+              >
+                Cari
+              </Button>
+            </InputGroup>
+          </form>
+          {searchedMovies && (
+            <Grid
+              templateColumns={{
+                base: "1fr",
+                sm: "repeat(3, 1fr)",
+                md: "repeat(5, 1fr)",
+              }}
+              columnGap="12px"
+              rowGap={`48px`}
+              marginTop={`48px`}
+            >
+              {searchedMovies.map((searchedMovie) => (
+                <MovieCard
+                  key={searchedMovie.id}
+                  title={searchedMovie.title}
+                  link={String(searchedMovie.id)}
+                  image={searchedMovie.poster_path}
+                  altColor={true}
+                />
+              ))}
+            </Grid>
+          )}
         </Container>
       </main>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
