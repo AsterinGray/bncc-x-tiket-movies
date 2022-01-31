@@ -29,6 +29,30 @@ const Home = ({ movies }) => {
     return data;
   };
 
+  const renderMovies = (movies, altColor = false) => {
+    return (
+      <Grid
+        templateColumns={{
+          base: "1fr",
+          sm: "repeat(3, 1fr)",
+          md: "repeat(5, 1fr)",
+        }}
+        columnGap="12px"
+        rowGap={`48px`}
+      >
+        {movies.map((movie) => (
+          <MovieCard
+            key={movie.id}
+            title={movie.title}
+            link={String(movie.id)}
+            image={movie.poster_path}
+            altColor={altColor}
+          />
+        ))}
+      </Grid>
+    );
+  };
+
   const onFormSubmit = async (e) => {
     e.preventDefault();
     const searchTerm = inputRef.current.value;
@@ -50,24 +74,7 @@ const Home = ({ movies }) => {
             <Heading as="h1" fontSize="36px" color="white" marginBottom="32px">
               Popular Sekarang
             </Heading>
-            <Grid
-              templateColumns={{
-                base: "1fr",
-                sm: "repeat(3, 1fr)",
-                md: "repeat(5, 1fr)",
-              }}
-              columnGap="12px"
-              rowGap={`48px`}
-            >
-              {movies.map((movie) => (
-                <MovieCard
-                  key={movie.id}
-                  title={movie.title}
-                  link={String(movie.id)}
-                  image={movie.poster_path}
-                />
-              ))}
-            </Grid>
+            {renderMovies(movies)}
           </Container>
         </Box>
         <Container maxW="container.lg" paddingY="48px" centerContent>
@@ -75,7 +82,7 @@ const Home = ({ movies }) => {
             Cari Film
           </Heading>
           <form onSubmit={(e) => onFormSubmit(e)}>
-            <InputGroup>
+            <InputGroup marginBottom={`48px`}>
               <InputLeftElement pointerEvents="none">
                 <SearchIcon color="gray.300" />
               </InputLeftElement>
@@ -90,28 +97,7 @@ const Home = ({ movies }) => {
               </Button>
             </InputGroup>
           </form>
-          {searchedMovies && (
-            <Grid
-              templateColumns={{
-                base: "1fr",
-                sm: "repeat(3, 1fr)",
-                md: "repeat(5, 1fr)",
-              }}
-              columnGap="12px"
-              rowGap={`48px`}
-              marginTop={`48px`}
-            >
-              {searchedMovies.map((searchedMovie) => (
-                <MovieCard
-                  key={searchedMovie.id}
-                  title={searchedMovie.title}
-                  link={String(searchedMovie.id)}
-                  image={searchedMovie.poster_path}
-                  altColor={true}
-                />
-              ))}
-            </Grid>
-          )}
+          {searchedMovies && renderMovies(searchedMovies, true)}
         </Container>
       </main>
     </>
