@@ -12,6 +12,7 @@ const MovieCard = ({ title, link, image, altColor = false }) => (
           objectFit="cover"
           alt={`${title} image`}
           borderRadius={"8px"}
+          fallbackSrc={"/img/movie.png"}
         />
         <Text
           textAlign="center"
