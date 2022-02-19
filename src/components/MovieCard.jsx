@@ -3,7 +3,7 @@ import { Image } from "@chakra-ui/react";
 
 import Link from "next/link";
 
-const MovieCard = ({ title, link = "/movie", image, altColor = false }) => (
+const MovieCard = ({ title, link, image, altColor = false }) => (
   <Link href={link} passHref>
     <a>
       <Box display="flex" flexDirection="column" alignItems="center">

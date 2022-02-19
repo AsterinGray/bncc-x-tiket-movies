@@ -1,5 +1,5 @@
-import { Container, Text } from '@chakra-ui/react'
-import Link from 'next/link'
+import { Container, Text } from "@chakra-ui/react";
+import Link from "next/link";
 
 const Navbar = () => (
   <Container
@@ -9,12 +9,12 @@ const Navbar = () => (
     justifyContent="space-between"
   >
     <Text color="#2B6CB0" fontWeight="bold">
-      <Link href={'/'}>BNCC x tiket Movies</Link>
+      <Link href={"/"}>BNCC x tiket Movies</Link>
     </Text>
-    <Text color={'#2D3748'} fontSize="14px" fontWeight="bold">
-      <Link href={'/login'}>Login</Link>
+    <Text fontSize="14px" fontWeight="bold" color={"gray.700"}>
+      <Link href={"/login"}>Login</Link>
     </Text>
   </Container>
-)
+);
 
-export default Navbar
+export default Navbar;
