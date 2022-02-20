@@ -1,6 +1,5 @@
 import { Box, Container, Text, useToast } from "@chakra-ui/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import api from "../api";
@@ -52,7 +51,9 @@ const Navbar = () => {
             color={"gray.700"}
             marginRight={"18px"}
           >
-            <Link href={"/profile"}>{data.username}</Link>
+            <Link href={"/profile"}>
+              <a>{data.username}</a>
+            </Link>
           </Text>
           <Text
             fontSize="14px"
@@ -66,7 +67,9 @@ const Navbar = () => {
         </Box>
       ) : (
         <Text fontSize="14px" fontWeight="bold" color={"gray.700"}>
-          <Link href={"/login"}>Login</Link>
+          <Link href={"/login"}>
+            <a>Login</a>
+          </Link>
         </Text>
       )}
     </Container>
