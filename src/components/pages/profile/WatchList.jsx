@@ -27,7 +27,7 @@ const WatchList = () => {
         <Text fontSize="4xl" color="black" fontWeight="bold">
           My Favorite Movies
         </Text>
-        {watchList && renderMovies(watchList)}
+        {watchList && renderMovies(watchList, true)}
       </Container>
     </Box>
   );
