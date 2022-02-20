@@ -19,6 +19,10 @@ const userSlice = createSlice({
     setUserData: (state, { payload }) => {
       state.data = payload;
     },
+    clearUser: (state, { payload }) => {
+      state.data = "";
+      state.session_id = "";
+    },
   },
 });
 

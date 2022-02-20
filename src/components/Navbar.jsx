@@ -1,9 +1,10 @@
-import { Box, Container, Text, useToast } from "@chakra-ui/react";
-import Link from "next/link";
 import { useEffect } from "react";
+import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
+import { Box, Container, Text, useToast } from "@chakra-ui/react";
+
 import api from "../api";
-import { setSessionId, setUserData } from "../store/userSlice";
+import { clearUser, setUserData } from "../store/userSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const Navbar = () => {
 
   const logout = async () => {
     await api.delete("/authentication/session", { data: { session_id } });
-    dispatch(setSessionId(""));
+    dispatch(clearUser());
     toast({
       title: "Logout Sukses",
       status: "success",
