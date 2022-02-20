@@ -3,8 +3,8 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, Container, Text, useToast } from "@chakra-ui/react";
 
-import api from "../api";
-import { clearUser, setUserData } from "../store/userSlice";
+import api from "../../api";
+import { clearUser, setUserData } from "../../store/userSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();

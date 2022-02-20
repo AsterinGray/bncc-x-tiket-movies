@@ -1,10 +1,10 @@
-import Head from "next/head";
-import Navbar from "../src/components/Navbar";
+import Navbar from "../src/components/common/Navbar";
 import ProfileBlock from "../src/components/ProfileBlock";
 import WatchList from "../src/components/WatchList";
 import { useSelector } from "react-redux";
 import router from "next/router";
 import { useEffect } from "react";
+import Layout from "../src/components/common/Layout";
 
 const Profile = () => {
   const { session_id } = useSelector((state) => state.user);
@@ -14,16 +14,10 @@ const Profile = () => {
   }, []);
 
   return (
-    <>
-      <Head>
-        <title>BNCC Movies</title>
-        <meta name="description" content="BNCC Movies" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Navbar />
+    <Layout>
       <ProfileBlock />
       <WatchList />
-    </>
+    </Layout>
   );
 };
 

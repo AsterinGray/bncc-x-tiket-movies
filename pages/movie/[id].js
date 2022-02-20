@@ -7,16 +7,15 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import Head from "next/dist/shared/lib/head";
-import Navbar from "../../src/components/Navbar";
 import api from "../../src/api";
-import DragScroll from "../../src/components/DragScroll";
+import DragScroll from "../../src/components/common/DragScroll";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Flex, Spacer } from '@chakra-ui/react'
+import { Flex } from "@chakra-ui/react";
 import router from "next/router";
 import { renderMovies } from "../../src/utils";
+import Layout from "../../src/components/common/Layout";
 
 export const getServerSideProps = async ({ params }) => {
   const movie_id = params.id;
@@ -27,11 +26,11 @@ export const getServerSideProps = async ({ params }) => {
     data: { results: similarMovie },
   } = await api.get(`/movie/${movie_id}/similar`);
   return {
-    props: { movieDetail, similarMovie, movieCredit, movie_id},
+    props: { movieDetail, similarMovie, movieCredit, movie_id },
   };
 };
 
-const Detail = ({movieDetail, similarMovie, movieCredit, movie_id}) => {
+const Detail = ({ movieDetail, similarMovie, movieCredit, movie_id }) => {
   const {
     session_id,
     data: { id: account_id },
@@ -55,7 +54,7 @@ const Detail = ({movieDetail, similarMovie, movieCredit, movie_id}) => {
   }, [account_id, session_id, isFavorite, movie_id]);
 
   const changeFavorite = async (favorite) => {
-    if(!session_id) router.push("/login");
+    if (!session_id) router.push("/login");
 
     try {
       await api.post(
@@ -82,71 +81,76 @@ const Detail = ({movieDetail, similarMovie, movieCredit, movie_id}) => {
   };
 
   return (
-    <>
-      <Head>
-        <title>BNCC Movies</title>
-        <meta name="description" content="BNCC Movies" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Navbar />
-      <main>
-        <Box>
-          <Container maxW="container.lg" paddingY="32px">
-            <Flex justifyContent="space-between">
-              <Box>
-                <Image
-                  src={`https://image.tmdb.org/t/p/w500/${(movieDetail.poster_path)}`}
-                  objectFit="cover"
-                  alt={`image`}
-                  borderRadius="8px"
-                  maxWidth="250px"
-                />
-              </Box>
-              <Box marginLeft="80px" >
-                <Flex mt="10px" alignItems="baseline" justifyContent="space-between">
-                    <Flex alignItems="baseline">
-                      <Flex>
-                        <Heading as="h1" fontSize="36px" color="#2D3748" marginBottom="36px">
-                          {movieDetail.original_title}
-                        </Heading>
-                      </Flex>
-                      <Flex>
-                        <Text marginLeft="19px" fontSize="24px" marginBottom="36px" color="#2D3748">
-                          {movieDetail.release_date.slice(0,4)}
-                        </Text>
-                      </Flex>
-                    </Flex>
-                    <Flex align="end">
-                      
-                        <Button
-                          colorScheme={isFavorite ? "white" : "blue"}
-                          color={isFavorite ? "#2D3748" : "white"}
-                          borderColor={"#2B6CB0"}
-                          onClick={() => changeFavorite(!isFavorite)}
-                        >
-                          {isFavorite ? "Dalam list favoritmu" : "Favoritkan"}
-                        </Button>
-                      
-                    </Flex>         
-                </Flex>
-                <Box>
-                  <Text fontSize="18px" marginBottom="36px" color="#2D3748">
-                    {movieDetail.tagline}
-                  </Text>
-                </Box>
-                <Box>
-                  <Text fontSize="14px" color="#2D3748">
-                    {movieDetail.overview}
-                  </Text>
-                </Box>
-              </Box>
-            </Flex>
+    <Layout>
+      <Box>
+        <Container maxW="container.lg" paddingY="32px">
+          <Flex justifyContent="space-between">
             <Box>
-              <Heading fontSize="30px" color="#2D3748" marginTop="80px">
-                  Cast
-              </Heading>
+              <Image
+                src={`https://image.tmdb.org/t/p/w500/${movieDetail.poster_path}`}
+                objectFit="cover"
+                alt={`image`}
+                borderRadius="8px"
+                maxWidth="250px"
+              />
             </Box>
-            <DragScroll>
+            <Box marginLeft="80px">
+              <Flex
+                mt="10px"
+                alignItems="baseline"
+                justifyContent="space-between"
+              >
+                <Flex alignItems="baseline">
+                  <Flex>
+                    <Heading
+                      as="h1"
+                      fontSize="36px"
+                      color="#2D3748"
+                      marginBottom="36px"
+                    >
+                      {movieDetail.original_title}
+                    </Heading>
+                  </Flex>
+                  <Flex>
+                    <Text
+                      marginLeft="19px"
+                      fontSize="24px"
+                      marginBottom="36px"
+                      color="#2D3748"
+                    >
+                      {movieDetail.release_date.slice(0, 4)}
+                    </Text>
+                  </Flex>
+                </Flex>
+                <Flex align="end">
+                  <Button
+                    colorScheme={isFavorite ? "white" : "blue"}
+                    color={isFavorite ? "#2D3748" : "white"}
+                    borderColor={"#2B6CB0"}
+                    onClick={() => changeFavorite(!isFavorite)}
+                  >
+                    {isFavorite ? "Dalam list favoritmu" : "Favoritkan"}
+                  </Button>
+                </Flex>
+              </Flex>
+              <Box>
+                <Text fontSize="18px" marginBottom="36px" color="#2D3748">
+                  {movieDetail.tagline}
+                </Text>
+              </Box>
+              <Box>
+                <Text fontSize="14px" color="#2D3748">
+                  {movieDetail.overview}
+                </Text>
+              </Box>
+            </Box>
+          </Flex>
+          <Box>
+            <Heading fontSize="30px" color="#2D3748" marginTop="80px">
+              Cast
+            </Heading>
+          </Box>
+          <DragScroll>
             {movieCredit.cast.map((cast) => {
               return (
                 <Box key={cast.id}>
@@ -171,21 +175,18 @@ const Detail = ({movieDetail, similarMovie, movieCredit, movie_id}) => {
               );
             })}
           </DragScroll>
+        </Container>
+        <Box marginTop="80px">
+          <Container maxW="container.lg" paddingY={8}>
+            <Heading as="h1" marginBottom={8} color="#2D3748">
+              Similar Movie
+            </Heading>
+            {renderMovies(similarMovie, true)}
           </Container>
-          <Box marginTop="80px">
-            <Container maxW="container.lg" paddingY={8}>
-              <Heading as="h1" marginBottom={8} color="#2D3748">
-                Similar Movie
-              </Heading>
-              {renderMovies(similarMovie, true)}
-            </Container>
-          </Box>
         </Box>
-        
-      </main>
-    </>
+      </Box>
+    </Layout>
   );
-
-}
+};
 
 export default Detail;
