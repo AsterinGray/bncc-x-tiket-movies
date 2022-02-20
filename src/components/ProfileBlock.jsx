@@ -15,29 +15,10 @@ import {
     CircularProgressLabel
   } from "@chakra-ui/react";
 
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import api from "../api";
-import { setUserData } from "../store/userSlice";
+import { useSelector } from "react-redux";
 
 const ProfileBlock = () => {
-    const dispatch = useDispatch();
     const { session_id, data } = useSelector((state) => state.user);
-
-    useEffect(() => {
-        const getProfile = async () => {
-          if (session_id) {
-            const { data } = await api.get("/account", {
-              params: {
-                session_id,
-              },
-            });
-            dispatch(setUserData(data));
-          }
-        };
-
-        getProfile();
-      }, [session_id, dispatch]);
 
     return (
         <>

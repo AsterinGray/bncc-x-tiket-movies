@@ -6,38 +6,22 @@ import {
 } from "@chakra-ui/react";
 
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import api from "../api";
 import { renderMovies } from "/src/utils/index";
-import { setUserData } from "../store/userSlice";
 
 const WatchList = () => {
-    const dispatch = useDispatch();
     const { session_id, data } = useSelector((state) => state.user);
     const [watchList, setWatchList] = useState([]);
 
     useEffect(() => {
-        const getProfile = async () => {
-          if (session_id) {
-            const { data } = await api.get("/account", {
+        if(session_id){
+            api.get(`/account/${data.id}/favorite/movies`, {
               params: {
-                session_id,
-              },
-            });
-            dispatch(setUserData(data));
-          }
-        };
-
-        getProfile();
-      }, [session_id, dispatch]);
-
-
-    useEffect(() => {
-        api.get(`/account/${data.id}/favorite/movies`, {
-            params: {
-                session_id,
-              },
-        }).then((res) => setWatchList(res.data.results));
+                  session_id,
+                },
+          }).then((res) => setWatchList(res.data.results));
+        }
     }, []);
 
     const renderWatchList = () => {
