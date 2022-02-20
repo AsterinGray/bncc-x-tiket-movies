@@ -21,17 +21,13 @@ const WatchList = () => {
     }
   }, [session_id, data]);
 
-  const renderWatchList = () => {
-    return renderMovies(watchList);
-  };
-
   return (
     <Box backgroundColor="white" paddingY={10} paddingTop={9}>
-      <Container maxW="container.xl">
+      <Container maxW="container.lg">
         <Text fontSize="4xl" color="black" fontWeight="bold">
           My Favorite Movies
         </Text>
-        <Grid>{watchList && renderWatchList()}</Grid>
+        {watchList && renderMovies(watchList)}
       </Container>
     </Box>
   );
