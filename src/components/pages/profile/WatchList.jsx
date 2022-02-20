@@ -1,8 +1,8 @@
 import { Container, Text, Box } from "@chakra-ui/react";
-
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import api from "../api";
+
+import api from "../../../api";
 import { renderMovies } from "/src/utils/index";
 
 const WatchList = () => {

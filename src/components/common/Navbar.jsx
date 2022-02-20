@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
+import Link from "next/link";
 import { Box, Container, Text, useToast } from "@chakra-ui/react";
 
 import api from "../../api";
@@ -15,9 +15,7 @@ const Navbar = () => {
     const getProfile = async () => {
       if (session_id) {
         const { data } = await api.get("/account", {
-          params: {
-            session_id,
-          },
+          params: { session_id },
         });
         dispatch(setUserData(data));
       }
@@ -27,7 +25,7 @@ const Navbar = () => {
 
   const logout = async () => {
     await api.delete("/authentication/session", { data: { session_id } });
-    dispatch(clearUser());
+    dispatch(clearUser("clear"));
     toast({
       title: "Logout Sukses",
       status: "success",
