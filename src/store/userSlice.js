@@ -20,12 +20,13 @@ const userSlice = createSlice({
       state.data = payload;
     },
     clearUser: (state, { payload }) => {
-      state.data = "";
+      state.data = {};
       state.session_id = "";
     },
   },
 });
 
-export const { setSessionId, setRequestToken, setUserData } = userSlice.actions;
+export const { setSessionId, setRequestToken, setUserData, clearUser } =
+  userSlice.actions;
 
 export default userSlice.reducer;

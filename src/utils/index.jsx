@@ -1,5 +1,5 @@
 import { Grid } from "@chakra-ui/react";
-import MovieCard from "../components/MovieCard";
+import MovieCard from "../components/common/MovieCard";
 
 export const renderMovies = (movies, altColor = false) => (
   <Grid

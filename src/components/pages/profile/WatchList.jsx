@@ -1,8 +1,8 @@
-import { Container, Text, Box, Grid } from "@chakra-ui/react";
-
+import { Container, Text, Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import api from "../api";
+
+import api from "../../../api";
 import { renderMovies } from "/src/utils/index";
 
 const WatchList = () => {
@@ -21,17 +21,13 @@ const WatchList = () => {
     }
   }, [session_id, data]);
 
-  const renderWatchList = () => {
-    return renderMovies(watchList);
-  };
-
   return (
     <Box backgroundColor="white" paddingY={10} paddingTop={9}>
-      <Container maxW="container.xl">
+      <Container maxW="container.lg">
         <Text fontSize="4xl" color="black" fontWeight="bold">
           My Favorite Movies
         </Text>
-        <Grid>{watchList && renderWatchList()}</Grid>
+        {watchList && renderMovies(watchList, true)}
       </Container>
     </Box>
   );

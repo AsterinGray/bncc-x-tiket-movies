@@ -1,22 +1,8 @@
-import {
-	Box,
-	Button,
-	Container,
-	Heading,
-	Image,
-	Text,
-	useToast,
-} from "@chakra-ui/react";
-import Head from "next/dist/shared/lib/head";
-import Navbar from "../../src/components/Navbar";
 import api from "../../src/api";
-import DragScroll from "../../src/components/DragScroll";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Flex, Spacer } from "@chakra-ui/react";
-import router from "next/router";
-import { renderMovies } from "../../src/utils";
+import Layout from "../../src/components/common/Layout";
+import MovieCast from "../../src/components/pages/movie/MovieCast";
+import MovieDetail from "../../src/components/pages/movie/MovieDetail";
+import SimilarMovie from "../../src/components/pages/movie/SimilarMovie";
 
 export const getServerSideProps = async ({ params }) => {
 	const movie_id = params.id;
@@ -32,159 +18,12 @@ export const getServerSideProps = async ({ params }) => {
 };
 
 const Detail = ({ movieDetail, similarMovie, movieCredit, movie_id }) => {
-	const {
-		session_id,
-		data: { id: account_id },
-	} = useSelector((state) => state.user);
-	const [isFavorite, setIsFavorite] = useState(false);
-	const toast = useToast();
-
-	useEffect(() => {
-		const getFavoriteMovies = async () => {
-			const {
-				data: { results },
-			} = await api.get(`/account/${account_id}/favorite/movies`, {
-				params: { session_id },
-			});
-			if (results.find((result) => result.id == movie_id)) setIsFavorite(true);
-			else setIsFavorite(false);
-		};
-
-		if (session_id) getFavoriteMovies();
-		else setIsFavorite(false);
-	}, [account_id, session_id, isFavorite, movie_id]);
-
-	const changeFavorite = async (favorite) => {
-		if (!session_id) router.push("/login");
-
-		try {
-			await api.post(
-				`/account/${account_id}/favorite`,
-				{ media_type: "movie", media_id: movie_id, favorite },
-				{ params: { session_id } }
-			);
-			toast({
-				title: "Sukses",
-				description: isFavorite
-					? `Hapus ${movieDetail.title} dari favorit`
-					: `Favoritkan ${movieDetail.title}`,
-				status: "success",
-				isClosable: true,
-			});
-			setIsFavorite(!isFavorite);
-		} catch (error) {
-			toast({
-				title: `Failed to add favorite`,
-				status: "error",
-				isClosable: true,
-			});
-		}
-	};
-
 	return (
-		<>
-			<Head>
-				<title>BNCC Movies</title>
-				<meta name="description" content="BNCC Movies" />
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
-			<Navbar />
-			<main>
-				<Box>
-					<Container maxW="container.lg" paddingY="32px" marginBottom="40px">
-						<Flex justifyContent="space-between">
-							<Box>
-								<Image
-									src={`https://image.tmdb.org/t/p/w500/${movieDetail.poster_path}`}
-									objectFit="cover"
-									alt={`image`}
-									fallbackSrc={`/img/movie.png`}
-									borderRadius="8px"
-									maxWidth="250px"
-								/>
-							</Box>
-							<Box marginLeft="80px">
-								<Flex
-									mt="10px"
-									alignItems="flex-end"
-									justifyContent="space-between"
-									marginBottom="36px"
-								>
-									<Flex alignItems="flex-end">
-										<Heading as="h1" fontSize="36px" color="#2D3748">
-											{movieDetail.original_title}
-										</Heading>
-										<Text marginLeft="19px" fontSize="24px" color="#2D3748">
-											{movieDetail.release_date.slice(0, 4)}
-										</Text>
-									</Flex>
-									<Flex marginLeft="64px">
-										<Button
-											colorScheme={isFavorite ? "white" : "blue"}
-											color={isFavorite ? "#2D3748" : "white"}
-											borderColor={"#2B6CB0"}
-											onClick={() => changeFavorite(!isFavorite)}
-										>
-											{isFavorite ? "Dalam list favoritmu" : "Favoritkan"}
-										</Button>
-									</Flex>
-								</Flex>
-								<Box>
-									<Text fontSize="18px" marginBottom="36px" color="#2D3748">
-										{movieDetail.tagline}
-									</Text>
-								</Box>
-								<Box>
-									<Text fontSize="14px" color="#2D3748">
-										{movieDetail.overview}
-									</Text>
-								</Box>
-							</Box>
-						</Flex>
-					</Container>
-					<Box backgroundColor="#2B6CB0">
-						<Container maxW="container.lg" paddingY="32px">
-							<Heading fontSize="30px" color="white">
-								Cast
-							</Heading>
-							<DragScroll>
-								{movieCredit.cast.map((cast) => {
-									return (
-										<Box key={cast.id}>
-											<Image
-												src={`https://image.tmdb.org/t/p/w500${cast.profile_path}`}
-												alt={cast.name}
-												borderRadius="lg"
-												objectFit="cover"
-												height="190px"
-												minWidth="140px"
-												fallbackSrc="/img/cast.png"
-											/>
-											<Box>
-												<Text color="white" fontWeight="bold" fontSize="16px">
-													{cast.name}
-												</Text>
-												<Text color="white" fontSize="14px">
-													{cast.character}
-												</Text>
-											</Box>
-										</Box>
-									);
-								})}
-							</DragScroll>
-						</Container>
-					</Box>
-					<Box marginTop="80px">
-						<Container maxW="container.lg" paddingY={8}>
-							<Heading as="h1" marginBottom={8} color="#2D3748">
-								Similar Movie
-							</Heading>
-							{renderMovies(similarMovie, true)}
-						</Container>
-					</Box>
-				</Box>
-			</main>
-		</>
+		<Layout>
+			<MovieDetail movieDetail={movieDetail} movie_id={movie_id} />
+			<MovieCast movieCredit={movieCredit} />
+			<SimilarMovie similarMovie={similarMovie} />
+		</Layout>
 	);
 };
 

@@ -1,31 +1,23 @@
-import Head from "next/head";
-import Navbar from "../src/components/Navbar";
-import ProfileBlock from "../src/components/ProfileBlock";
-import WatchList from "../src/components/WatchList";
-import { useSelector } from "react-redux";
 import router from "next/router";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import Layout from "../src/components/common/Layout";
+import ProfileBlock from "../src/components/pages/profile/ProfileBlock";
+import WatchList from "../src/components/pages/profile/WatchList";
 
 const Profile = () => {
-    const { session_id, data } = useSelector((state) => state.user);
-    
-    useEffect(() => {
-        if(!session_id) router.push("/login");
-    }, []);
-    
-    return (
-        <>
-            <Head>
-                <title>BNCC Movies</title>
-                <meta name="description" content="BNCC Movies" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <Navbar/>
-            <ProfileBlock/>
-            <WatchList/>
-        </>
-        
-    );
+  const { session_id } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!session_id) router.push("/login");
+  }, [session_id]);
+
+  return (
+    <Layout>
+      <ProfileBlock />
+      <WatchList />
+    </Layout>
+  );
 };
 
 export default Profile;
