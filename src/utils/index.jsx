@@ -4,7 +4,7 @@ import MovieCard from "../components/common/MovieCard";
 export const renderMovies = (movies, altColor = false) => (
   <Grid
     templateColumns={{
-      base: "1fr",
+      base: "repeat(2, 1fr)",
       sm: "repeat(3, 1fr)",
       md: "repeat(5, 1fr)",
     }}
