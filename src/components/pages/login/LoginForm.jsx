@@ -36,7 +36,6 @@ const LoginForm = () => {
         "/authentication/session/new",
         { request_token }
       );
-      console.log("object");
       toast({
         title: `Login Sukses`,
         status: "success",
