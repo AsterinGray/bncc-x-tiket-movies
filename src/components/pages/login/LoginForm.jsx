@@ -7,6 +7,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Text,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -67,11 +68,29 @@ const LoginForm = () => {
       alignItems={"center"}
     >
       <VStack
-        width={"50%"}
+        width={{
+          base: "80%",
+          md: "50%",
+        }}
         display={"flex"}
         flexDirection={"column"}
         alignItems={"initial"}
       >
+        <VStack
+          display={{
+            base: "flex",
+            md: "none",
+          }}
+          flexDirection={"column"}
+          alignItems={"baseline"}
+        >
+          <Text color={"#2B6CB0"} fontSize={"26px"}>
+            Login ke akun
+          </Text>
+          <Text color={"#2B6CB0"} fontWeight={"bold"} fontSize={"26px"}>
+            BNCC x tiket Movies
+          </Text>
+        </VStack>
         <form onSubmit={(e) => onFormSubmit(e)}>
           <FormControl mt={4}>
             <FormLabel htmlFor="username">Username</FormLabel>
